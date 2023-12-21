@@ -30,7 +30,7 @@ public class SortingUI extends JFrame{
 
 
         // Create a Timer with a 10-millisecond delay
-        timer = new Timer(10, new ActionListener() {
+        timer = new Timer(5, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // This code will be executed every 10 milliseconds
@@ -63,20 +63,14 @@ public class SortingUI extends JFrame{
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    for (Component sortingPanel:content.getRootPane().getComponents()){
-                        System.out.println((sortingPanel.toString()) );
+                    for (Component sortingPanel:content.getComponents()){
+                        System.out.println((sortingPanel.toString()) +" type");
                         if (sortingPanel instanceof Sorting){
-                            ((Sorting) sortingPanel).run();
+                            Thread sorter = new Thread(new Sorter((Sorting)sortingPanel));
+                            sorter.start();
+                            //((Sorting)sortingPanel).sortProto();
                         }
 
-                        if (sortingPanel instanceof Sorting) {
-                            ((Sorting) sortingPanel).run();
-                        }
-
-                        System.out.println(sortingPanel);
-                        
-                        
-                        
                     }
                     timer.start();
 
@@ -90,10 +84,10 @@ public class SortingUI extends JFrame{
     public class Content extends JPanel{
         public Content(){
             ArrayList<Integer> list =  new ArrayList<Integer>();
-            list = generateRandomList(100);
+            list = generateRandomList(50);
 
 
-            Sorting sorting1 = new BubbleSort("sorting 1");
+            Sorting sorting1 = new BubbleSort("Bubble sort");
             Sorting sorting2 = new BubbleSort("sorting 2");
             Sorting sorting3 = new BubbleSort("sorting 3");
             Sorting sorting4 = new BubbleSort("sorting 4");

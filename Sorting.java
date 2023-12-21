@@ -6,7 +6,7 @@ import java.awt.*;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public abstract class Sorting extends JPanel implements Runnable{
+public abstract class Sorting extends JPanel{
     ArrayList<Integer> list;
     
     String name;
@@ -22,20 +22,23 @@ public abstract class Sorting extends JPanel implements Runnable{
     }
 
     
-    
+    private ArrayList<Integer> getCopyOfList(){
+    return  new ArrayList<Integer>(list);
+    }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public synchronized void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int pos = 10;
-        int width = getWidth()/list.size();
-        for (Integer value :list){
+        int pos = 40;
+        ArrayList<Integer> copy = getCopyOfList();
+        int width = getWidth()/copy.size();
+        for (Integer value :copy){
 
             double minValue = 0.0;
             double maxValue = 100.0;
-            double yValue =  (value*(getHeight()*2/3)/ Collections.max(list)*100)/100;
+            double yValue =  (value*(getHeight()*2/3)/ Collections.max(copy)*100)/100;
 
-            // -(value*100/ Collections.max(list)*100)/40
+            
             
             double colValue = yValue *2.55;
             Color color = mapValueToColor(yValue);
@@ -58,15 +61,30 @@ public abstract class Sorting extends JPanel implements Runnable{
         // Use the hue to create a color with full saturation and brightness
         return Color.getHSBColor(hue/6, 1.0f, 1.0f);
     }
-    @Override
-    public void run() {
-        sort();
-    }
+    
 
-    abstract void sort();
+    
 
     @Override
     public String toString(){
         return "Sorting";
+    }
+
+    public void sortProto(){
+        System.out.println(list);
+
+        int n = list.size();
+        int temp = 0;
+        for (int i = 0; i < n-i; i++) {
+            for (int j = 0; j < (n - i - 1); j++) {
+                if (list.get(j) > list.get(j+1)) {
+                    temp = list.get(j);
+                    list.set(j,list.get(j+1));
+                    list.set((j+1), temp);
+                }
+            }
+        }
+        System.out.println(list);
+    
     }
 }

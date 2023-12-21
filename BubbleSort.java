@@ -21,6 +21,7 @@ public class BubbleSort extends Sorting{
                     list.set(temp,list.get(j + 1));
 
                     swapped = true;
+                    
                 }
             }
 
@@ -28,6 +29,11 @@ public class BubbleSort extends Sorting{
             if (!swapped) {
                 break;
             }
+        }
+        System.out.println("done");
+        System.out.println("Size of list: "+list.size());
+        for (int value :list){
+            System.out.println(value);
         }
     }
     
