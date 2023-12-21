@@ -27,6 +27,7 @@ public class SortingUI extends JFrame{
         
         // Make the JFrame visible
         setVisible(true);
+        
 
 
         // Create a Timer with a 10-millisecond delay
@@ -66,7 +67,7 @@ public class SortingUI extends JFrame{
                     for (Component sortingPanel:content.getComponents()){
                         System.out.println((sortingPanel.toString()) +" type");
                         if (sortingPanel instanceof Sorting){
-                            Thread sorter = new Thread(new Sorter((Sorting)sortingPanel));
+                            Thread sorter = new Thread(new BubbleSort((Sorting)sortingPanel));
                             sorter.start();
                             //((Sorting)sortingPanel).sortProto();
                         }
@@ -82,15 +83,18 @@ public class SortingUI extends JFrame{
     }
 
     public class Content extends JPanel{
+
+        ArrayList<Thread> threads;
+
         public Content(){
             ArrayList<Integer> list =  new ArrayList<Integer>();
             list = generateRandomList(50);
 
 
-            Sorting sorting1 = new BubbleSort("Bubble sort");
-            Sorting sorting2 = new BubbleSort("sorting 2");
-            Sorting sorting3 = new BubbleSort("sorting 3");
-            Sorting sorting4 = new BubbleSort("sorting 4");
+            Sorting sorting1 = new Sorting("Bubble sort");
+            Sorting sorting2 = new Sorting("sorting 2");
+            Sorting sorting3 = new Sorting("sorting 3");
+            Sorting sorting4 = new Sorting("sorting 4");
 
             sorting1.addValuesToList(list);sorting2.addValuesToList(list);
             sorting3.addValuesToList(list);sorting4.addValuesToList(list);
@@ -103,6 +107,13 @@ public class SortingUI extends JFrame{
             add(sorting3);
             add(sorting4);
 
+            threads = new ArrayList<>();
+
+
+            Thread bubble = new Thread( new BubbleSort((Sorting)sorting1));
+            Thread bucket = new Thread( new BubbleSort((Sorting)sorting2));
+            threads.add(bubble);
+            threads.add(bucket);
             
         }
     }

@@ -1,40 +1,38 @@
-public class BubbleSort extends Sorting{
+public class BubbleSort extends Sorter{
 
-    public BubbleSort(String name) {
-        super(name);
+    public BubbleSort(Sorting motherPanel) {
+        super(motherPanel);
         //TODO Auto-generated constructor stub
     }
 
     @Override
-    void sort() {
+    public synchronized void run() {
+        System.out.println(list);
         int n = list.size();
-        boolean swapped;
+        
+        
+        int temp = 0;
+        for (int i = 0; i < n; i++) {
 
-        for (int i = 0; i < n - 1; i++) {
-            swapped = false;
-
-            for (int j = 0; j < n - i - 1; j++) {
-                if (list.get(j) > list.get(j+1)) {
-                    // Swap arr[j] and arr[j+1]
-                    int temp = list.get(j);
-                    list.set(j,list.get(j+1));
-                    list.set(temp,list.get(j + 1));
-
-                    swapped = true;
+            for (int j = 0; j < (n -i-1); j++) {
+               
                     
+                try {
+                    Thread.sleep(duration);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                if (list.get(j) > list.get(j+1)) {
+                    temp = list.get(j);
+                    list.set(j,list.get(j+1));
+                    list.set((j+1), temp);
                 }
             }
-
-            // If no two elements were swapped by inner loop, the array is sorted
-            if (!swapped) {
-                break;
-            }
         }
-        System.out.println("done");
-        System.out.println("Size of list: "+list.size());
-        for (int value :list){
-            System.out.println(value);
-        }
+        System.out.println("completed sorting");
+        
+        System.out.println(list);
     }
     
 }

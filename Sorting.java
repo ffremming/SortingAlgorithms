@@ -6,7 +6,7 @@ import java.awt.*;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public abstract class Sorting extends JPanel{
+public class Sorting extends JPanel{
     ArrayList<Integer> list;
     
     String name;
@@ -68,23 +68,5 @@ public abstract class Sorting extends JPanel{
     @Override
     public String toString(){
         return "Sorting";
-    }
-
-    public void sortProto(){
-        System.out.println(list);
-
-        int n = list.size();
-        int temp = 0;
-        for (int i = 0; i < n-i; i++) {
-            for (int j = 0; j < (n - i - 1); j++) {
-                if (list.get(j) > list.get(j+1)) {
-                    temp = list.get(j);
-                    list.set(j,list.get(j+1));
-                    list.set((j+1), temp);
-                }
-            }
-        }
-        System.out.println(list);
-    
     }
 }
