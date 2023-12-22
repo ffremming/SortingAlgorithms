@@ -1,3 +1,5 @@
+package SortingAlgorithms.Sorters;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -7,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Sorting extends JPanel{
-    ArrayList<Integer> list;
+    public ArrayList<Integer> list;
     
     String name;
     public Sorting(String name){
@@ -34,9 +36,16 @@ public class Sorting extends JPanel{
         int width = getWidth()/copy.size();
         for (Integer value :copy){
 
+            double yValue = 0;
             double minValue = 0.0;
             double maxValue = 100.0;
-            double yValue =  (value*(getHeight()*2/3)/ Collections.max(copy)*100)/100;
+            try{
+                yValue =  (value*(getHeight()*2/3)/ Collections.max(copy)*100)/100;
+            }
+            catch (ArithmeticException e){
+                
+            }
+            
 
             
             

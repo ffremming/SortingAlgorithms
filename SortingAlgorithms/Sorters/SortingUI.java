@@ -1,3 +1,4 @@
+package SortingAlgorithms.Sorters;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +7,10 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.*;
+
+import SortingAlgorithms.Sorters.*;
+import SortingAlgorithms.Sorters.sorters.*;
+
 
 public class SortingUI extends JFrame{
 
@@ -64,14 +69,8 @@ public class SortingUI extends JFrame{
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    for (Component sortingPanel:content.getComponents()){
-                        System.out.println((sortingPanel.toString()) +" type");
-                        if (sortingPanel instanceof Sorting){
-                            Thread sorter = new Thread(new BubbleSort((Sorting)sortingPanel));
-                            sorter.start();
-                            //((Sorting)sortingPanel).sortProto();
-                        }
-
+                    for (Thread threads:content.threads){
+                        threads.start();
                     }
                     timer.start();
 
@@ -88,11 +87,11 @@ public class SortingUI extends JFrame{
 
         public Content(){
             ArrayList<Integer> list =  new ArrayList<Integer>();
-            list = generateRandomList(50);
+            list = generateRandomList(25);
 
 
             Sorting sorting1 = new Sorting("Bubble sort");
-            Sorting sorting2 = new Sorting("sorting 2");
+            Sorting sorting2 = new Sorting("Counting sort");
             Sorting sorting3 = new Sorting("sorting 3");
             Sorting sorting4 = new Sorting("sorting 4");
 
@@ -111,7 +110,9 @@ public class SortingUI extends JFrame{
 
 
             Thread bubble = new Thread( new BubbleSort((Sorting)sorting1));
-            Thread bucket = new Thread( new BubbleSort((Sorting)sorting2));
+            Thread bucket = new Thread( new CountingSort((Sorting)sorting2));
+            Thread selection = new Thread (new SelectionSort((Sorting)sorting3));
+            threads.add(selection);
             threads.add(bubble);
             threads.add(bucket);
             

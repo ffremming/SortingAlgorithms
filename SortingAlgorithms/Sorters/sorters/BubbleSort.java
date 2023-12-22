@@ -1,3 +1,8 @@
+
+package SortingAlgorithms.Sorters.sorters;
+
+import SortingAlgorithms.Sorters.Sorting;
+
 public class BubbleSort extends Sorter{
 
     public BubbleSort(Sorting motherPanel) {
