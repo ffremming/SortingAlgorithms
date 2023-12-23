@@ -4,12 +4,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+import javax.swing.border.Border;
 
 public class Sorting extends JPanel{
     public ArrayList<Integer> list;
+    
+
+    public int millis = 0;
+    public int nanos = 50;
     
     String name;
     public Sorting(String name){
@@ -17,8 +26,10 @@ public class Sorting extends JPanel{
         this.name = name;
         add(new JLabel(name));
         list = new ArrayList<Integer>();
-        
+        Border blackline = BorderFactory.createLineBorder(Color.gray);
+        setBorder(blackline);
     }
+
     public void addValuesToList(ArrayList<Integer> additionalList){
         list.addAll( additionalList);
     }
@@ -31,9 +42,12 @@ public class Sorting extends JPanel{
     @Override
     public synchronized void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int pos = 40;
+        setBackground(Color.white);
+
+       
+        int pos = 0;
         ArrayList<Integer> copy = getCopyOfList();
-        int width = getWidth()/copy.size();
+        int width = getWidth()/(copy.size()+0);
         for (Integer value :copy){
 
             double yValue = 0;
@@ -65,10 +79,10 @@ public class Sorting extends JPanel{
         value = Math.max(0.0, Math.min(100.0, value));
 
         // Map the value to a hue in the range [0.0, 1.0]
-        float hue = (float) (value / 125.0);
+        float hue = (float) (value / 750.0);
 
         // Use the hue to create a color with full saturation and brightness
-        return Color.getHSBColor(hue/6, 1.0f, 1.0f);
+        return Color.getHSBColor(hue, 1, 1);
     }
     
 

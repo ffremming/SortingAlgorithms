@@ -1,6 +1,8 @@
 package SortingAlgorithms.Sorters.sorters;
 
 import SortingAlgorithms.Sorters.Sorting;
+
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -17,23 +19,25 @@ public class SelectionSort extends Sorter{
 
         size = list.size();
 
+        //selection phase
         for (int i = 0;i<size-1;i++){
-            value = Collections.min(list.subList(i,size));
-            index = list.indexOf(value);
-           // firstValue = list.get(i);
-
-
-            //list.set(i,value);
-            //list.set(index,firstValue);
-            if (i!=index){
-                Collections.swap(list,i,index);
+            List<Integer> sublist = list.subList(i,size);
+            int lowVal = 1000;int lowIndex = -1;
+            for (index = 0;index<sublist.size();index++){
+                sleep();
+                if (sublist.get(index)< lowVal){
+                    lowVal = sublist.get(index);
+                    lowIndex = index;
+                }
             }
-            try {
-                Thread.sleep(duration);
-            } catch (InterruptedException e) {
-                
-                System.out.println("the thread is sleeping");
-            }
+            
+            //swap phase
+            Collections.swap(list,i,lowIndex+list.size()-sublist.size());
+           
+            
+            //sleeping
+            
+            
         }
         System.out.println(list);
         System.out.println("selection sort completed");

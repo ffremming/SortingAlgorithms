@@ -29,11 +29,9 @@ public class CountingSort extends Sorter {
 
         for (int num : list) {
             // Increment, considering the offset for negative numbers
-            try {
-                Thread.sleep(duration);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            
+            sleep();
+            
             amounts[num - lowest]++;
         }
 

@@ -11,7 +11,7 @@ import SortingAlgorithms.Sorters.Sorting;
 public abstract class Sorter implements Runnable{
     ArrayList<Integer> list;
     Sorting panel;
-    int duration = 100;
+    
 
     
     /**
@@ -21,4 +21,21 @@ public abstract class Sorter implements Runnable{
         this.panel = motherPanel;
         this.list = motherPanel.list;
     }
+
+    protected int getSortingSpeedNanos(){
+        return panel.nanos;
+    }
+    protected int getSortingSpeedMillis(){
+        return panel.millis;
+    }
+    protected void sleep(){
+        try {
+            
+            Thread.sleep(getSortingSpeedMillis(),getSortingSpeedNanos());
+        } catch (InterruptedException e) {
+            
+            System.out.println("the thread is sleeping");
+        }
+    }
+
 }

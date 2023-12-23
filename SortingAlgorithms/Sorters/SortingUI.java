@@ -1,12 +1,13 @@
 package SortingAlgorithms.Sorters;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import SortingAlgorithms.Sorters.*;
 import SortingAlgorithms.Sorters.sorters.*;
@@ -16,6 +17,9 @@ public class SortingUI extends JFrame{
 
     Timer timer ;
     Content content;
+    ArrayList<Thread> threads;
+    int size = 50;
+    
 
     public SortingUI(String name){
         JFrame frame;
@@ -24,11 +28,13 @@ public class SortingUI extends JFrame{
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        
+        threads = new ArrayList<>();
         content = new Content();
         Header header = new Header();
         add(header,BorderLayout.NORTH);
+        add(new OptionPanel(),BorderLayout.WEST);
         add(content,BorderLayout.CENTER);
+        
         
         // Make the JFrame visible
         setVisible(true);
@@ -42,7 +48,6 @@ public class SortingUI extends JFrame{
                 // This code will be executed every 10 milliseconds
                 // You can put your drawing or update logic here
 
-                
                 // Repaint the JFrame
                 revalidate();
                 repaint();
@@ -69,7 +74,26 @@ public class SortingUI extends JFrame{
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    for (Thread threads:content.threads){
+                    if (threads.size()>0){
+                        for (Thread threads:threads){
+                        threads.interrupt();
+                        }
+                    }
+                    
+
+                    Thread bubble = new Thread( new BubbleSort((Sorting)content.getComponents()[0]));
+                    Thread bucket = new Thread( new CountingSort((Sorting)content.getComponents()[1]));
+                    Thread selection = new Thread (new SelectionSort((Sorting)content.getComponents()[2]));
+                    Thread insertion = new Thread (new InsertionSort((Sorting)content.getComponents()[3]));
+                    threads.clear();
+                    threads.add(selection);
+                    threads.add(bubble);
+                    threads.add(bucket);
+                    threads.add(insertion);
+
+
+                    for (Thread threads:threads){
+                        
                         threads.start();
                     }
                     timer.start();
@@ -83,11 +107,12 @@ public class SortingUI extends JFrame{
 
     public class Content extends JPanel{
 
-        ArrayList<Thread> threads;
+        
+        
 
         public Content(){
             ArrayList<Integer> list =  new ArrayList<Integer>();
-            list = generateRandomList(25);
+            list = generateRandomList(size);
 
 
             Sorting sorting1 = new Sorting("Bubble sort");
@@ -106,19 +131,20 @@ public class SortingUI extends JFrame{
             add(sorting3);
             add(sorting4);
 
-            threads = new ArrayList<>();
+            
+            
 
-
-            Thread bubble = new Thread( new BubbleSort((Sorting)sorting1));
-            Thread bucket = new Thread( new CountingSort((Sorting)sorting2));
-            Thread selection = new Thread (new SelectionSort((Sorting)sorting3));
-            threads.add(selection);
-            threads.add(bubble);
-            threads.add(bucket);
             
         }
-    }
-    static ArrayList<Integer> generateRandomList(int size) {
+
+        public void shuffleLists(){
+            for (Component panel :content.getComponents()){
+                        ((Sorting)panel).list = generateRandomList(size);
+            }
+            revalidate();
+            repaint();
+        }
+        static ArrayList<Integer> generateRandomList(int size) {
         ArrayList<Integer> randomList = new ArrayList<>();
         Random random = new Random();
 
@@ -129,4 +155,105 @@ public class SortingUI extends JFrame{
 
         return randomList;
     }
+    }
+
+    public class OptionPanel extends JPanel{
+
+        public OptionPanel(){
+            
+            setLayout(new GridLayout(6,1));
+            addSlider();
+            addShuffleButton();
+            addSizeSlider();
+            
+        }
+
+        private void addSlider(){
+            add(new JLabel("speed"));
+            JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 30, 10);
+            //slider.setMinorTickSpacing();
+            //slider.setMajorTickSpacing();
+            slider.setPaintTicks(true);
+            slider.setPaintLabels(true);
+            
+
+            // Add a change listener to the slider
+            slider.addChangeListener((ChangeListener) new ChangeListener() {
+                
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    JSlider source = (JSlider) e.getSource();
+                    double value = ((double)source.getValue());
+
+                    int nanoVal = (int) Math.pow(2,value)-1;
+
+                    for (Component panel :content.getComponents()){
+                        if (nanoVal>999999){
+                            int millisVal = nanoVal -999999;
+                            //getting milisecond
+                            ((Sorting)panel).millis = millisVal/1000000;
+                            ((Sorting)panel).nanos = 999999;
+
+                        } else{
+                             ((Sorting)panel).nanos = nanoVal;
+                        }
+                       
+                        
+
+                        
+                    }
+                }
+            });
+            add(slider);
+        }   
+
+        private void addShuffleButton(){
+            
+            add(new JLabel("shuffle"));
+
+
+            JButton shuffleButton = new JButton();
+            shuffleButton.addActionListener(new ActionListener(){
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    content.shuffleLists();
+                }
+            });
+            add(shuffleButton);
+        }
+        
+
+        private void addSizeSlider(){
+            add(new JLabel("size"));
+            JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 400, 50);
+            slider.setMinorTickSpacing(25);
+            slider.setMajorTickSpacing(100);
+            slider.setPaintTicks(true);
+            slider.setPaintLabels(true);
+
+            // Add a change listener to the slider
+            slider.addChangeListener((ChangeListener) new ChangeListener() {
+                
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    for (Thread thread:threads){
+                        thread.stop();
+                    }
+
+
+
+                    JSlider source = (JSlider) e.getSource();
+                    int value = source.getValue();
+                    size = value;
+                    content.shuffleLists();
+
+                }
+            });
+            add(slider);
+        }
+        
+    }
+
+    
 }

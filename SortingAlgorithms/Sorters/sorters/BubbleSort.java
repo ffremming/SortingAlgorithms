@@ -21,13 +21,9 @@ public class BubbleSort extends Sorter{
 
             for (int j = 0; j < (n -i-1); j++) {
                
-                    
-                try {
-                    Thread.sleep(duration);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                
+                sleep();
+                
                 if (list.get(j) > list.get(j+1)) {
                     temp = list.get(j);
                     list.set(j,list.get(j+1));
